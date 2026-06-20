@@ -1,8 +1,8 @@
-# Deployment Runbook
+# Deployment and Operations Runbook
 
 ## Purpose
 
-This runbook describes how to build the Phase 2 modeling dataset and run the FastAPI package locally.
+This runbook describes how to build the modeling dataset, train model artifacts, and run the Phase 5 FastAPI prediction service locally.
 
 ## Prerequisites
 
@@ -15,18 +15,33 @@ Install dependencies:
 python3 -m pip install -r requirements.txt
 ```
 
-## Build Data Outputs
+## Build Data and Models
+
+Build Phase 2 features:
 
 ```bash
 python3 scripts/build_features.py
 ```
 
-Expected outputs:
+Train Phase 3 models:
+
+```bash
+python3 scripts/train_phase3_models.py
+```
+
+Run Phase 4 governance evaluation:
+
+```bash
+python3 scripts/evaluate_phase4_models.py
+```
+
+Expected inputs for the API:
 
 - `data_outputs/model_table.csv`
 - `data_outputs/feature_schema.json`
-- `data_outputs/drift_summary.csv`
-- `docs/phase2_data_quality_report.md`
+- `model_artifacts/risk_best_model.joblib`
+- `model_artifacts/claim_best_model.joblib`
+- `model_artifacts/feature_schema.json`
 
 ## Run API Locally
 
@@ -34,7 +49,7 @@ Expected outputs:
 uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Open the interactive docs:
+Open interactive API docs:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -46,19 +61,49 @@ http://127.0.0.1:8000/docs
 curl http://127.0.0.1:8000/health
 ```
 
-Expected response:
+Expected response includes:
 
 ```json
 {
   "status": "ok",
-  "model_table_available": true,
-  "schema_available": true
+  "api_version": "1.0.0",
+  "risk_model_available": true,
+  "claim_model_available": true
 }
 ```
 
-## Operational Checks
+## Prediction Endpoints
 
-- Re-run `python3 scripts/build_features.py` whenever source CSV files change.
-- Confirm `/health` returns `model_table_available: true` before exposing `/score/visit`.
-- Monitor unexpected changes in `data_outputs/drift_summary.csv` before model deployment.
-- Treat `/score/visit` as a transparent heuristic baseline until Phase 3 predictive modeling is implemented.
+- `POST /predict/risk`: predicts visit risk as `High`, `Low`, or `Medium`.
+- `POST /predict/claim`: predicts claim outcome as `Paid`, `Pending`, or `Rejected`.
+- `POST /score/visit`: legacy transparent heuristic endpoint retained for Phase 2 compatibility.
+
+Each model-backed response includes:
+
+- `prediction`
+- `probabilities`
+- `model_name`
+- `model_version`
+- `timestamp_utc`
+- `input_feature_hash`
+- `audit_log_id`
+
+## Audit Logging
+
+Model-backed predictions are appended to:
+
+```text
+logs/predictions.jsonl
+```
+
+Each line stores timestamp, model name, model version, input feature hash, prediction, probabilities, and audit log ID. Raw input features are intentionally not logged; the hash supports traceability without storing full request payloads.
+
+## Operations Checklist
+
+- Rebuild features when source CSV files change.
+- Retrain model artifacts after feature changes.
+- Rerun Phase 4 evaluation before deploying newly trained artifacts.
+- Confirm `/health` shows both model artifacts as available.
+- Monitor `logs/predictions.jsonl` volume and rotate the file if it grows large.
+- Review `docs/phase4/model_card.md` and segment metrics before production use.
+- Use these predictions for workflow prioritization and human review, not autonomous clinical or financial action.

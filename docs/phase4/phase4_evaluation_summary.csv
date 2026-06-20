@@ -1,0 +1,3 @@
+model,test_accuracy,test_macro_f1,critical_class,critical_class_recall
+risk_model,0.4092,0.3485,High,0.1261
+claim_model,0.4444,0.3743,Rejected,0.6044

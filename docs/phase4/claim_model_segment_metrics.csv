@@ -1,0 +1,13 @@
+segment,value,rows,accuracy,macro_f1,critical_class,critical_class_support,critical_class_recall
+city,Chennai,824,0.443,0.3851,Rejected,134,0.5448
+city,Mumbai,816,0.4461,0.3713,Rejected,127,0.5591
+city,Hyderabad,893,0.4726,0.3916,Rejected,142,0.6056
+city,Bangalore,829,0.4427,0.3813,Rejected,126,0.627
+city,Pune,789,0.4094,0.3396,Rejected,94,0.6489
+city,Delhi,849,0.4488,0.3737,Rejected,105,0.6667
+gender,M,2470,0.4348,0.3677,Rejected,335,0.603
+gender,F,2530,0.4538,0.3805,Rejected,393,0.6056
+insurance_provider,SecureLife,1200,0.45,0.3633,Rejected,179,0.5698
+insurance_provider,MediCareX,1368,0.4364,0.3709,Rejected,198,0.5707
+insurance_provider,CareOne,1235,0.4494,0.3794,Rejected,179,0.6369
+insurance_provider,HealthPlus,1197,0.4428,0.383,Rejected,172,0.6453

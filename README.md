@@ -7,6 +7,8 @@ This project is being built in phases. The current completed phase is:
 - Phase 1: SQL Analytics Layer - Business Intelligence Foundation
 - Phase 2: Python EDA, Data Quality, Feature Engineering, and API Package
 - Phase 3: Classification Modeling for Visit Risk and Claim Outcomes
+- Phase 4: Model Evaluation, Explainability, and Safety Checks
+- Phase 5: Deployment and API Integration
 
 ## Project Phases
 
@@ -15,7 +17,8 @@ This project is being built in phases. The current completed phase is:
 | Phase 1 | SQL analytics layer | [Phase1_SQL.ipynb](notebooks/Phase1_SQL.ipynb) | Complete |
 | Phase 2 | Exploratory data analysis | [Phase2_EDA.ipynb](notebooks/Phase2_EDA.ipynb) | Complete |
 | Phase 3 | Predictive modeling / AI layer | [Phase3_Modeling.ipynb](notebooks/Phase3_Modeling.ipynb) | Complete |
-| Phase 4 | Dashboard or decision support interface | Coming soon | Planned |
+| Phase 4 | Model evaluation and governance | [Phase4_Evaluation.ipynb](notebooks/Phase4_Evaluation.ipynb) | Complete |
+| Phase 5 | Deployment and API integration | FastAPI service | Complete |
 
 To view a phase notebook, click the notebook link above. GitHub renders `.ipynb` files directly in the browser, so visitors can read the workflow, SQL, outputs, and conclusions without installing anything.
 
@@ -48,11 +51,13 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 ├── notebooks/
 │   ├── Phase1_SQL.ipynb
 │   ├── Phase2_EDA.ipynb
-│   └── Phase3_Modeling.ipynb
+│   ├── Phase3_Modeling.ipynb
+│   └── Phase4_Evaluation.ipynb
 ├── scripts/
 │   ├── build_sqlite_db.py
 │   ├── build_features.py
-│   └── train_phase3_models.py
+│   ├── train_phase3_models.py
+│   └── evaluate_phase4_models.py
 ├── api/
 │   └── main.py
 ├── data_outputs/
@@ -79,7 +84,9 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
     ├── Healthcare_Insights_Report.docx
     ├── healthcare_insights_report_summary.md
     ├── index_strategy.md
-    └── phase2_data_quality_report.md
+    ├── phase5_deployment_guide.md
+    ├── phase2_data_quality_report.md
+    └── phase4/
 ```
 
 ## How to Run Phase 1
@@ -200,9 +207,98 @@ Final business report:
 - Saved deployable `.joblib` pipelines that include preprocessing and model steps.
 - Documented leakage-safe feature sets and production feature schema.
 
+## Phase 4: Evaluation, Explainability, and Safety
+
+Phase 4 evaluates the saved Phase 3 models for governance readiness. It computes train/test metrics, business-critical recall, feature importance, demographic and regional segment performance, and consolidated model-card documentation.
+
+### How to Run Phase 4
+
+Train Phase 3 models first:
+
+```bash
+python3 scripts/train_phase3_models.py
+```
+
+Run Phase 4 evaluation:
+
+```bash
+python3 scripts/evaluate_phase4_models.py
+```
+
+Open the evaluation notebook:
+
+- [notebooks/Phase4_Evaluation.ipynb](notebooks/Phase4_Evaluation.ipynb)
+
+Phase 4 outputs:
+
+- `notebooks/Phase4_Evaluation.ipynb`
+- `scripts/evaluate_phase4_models.py`
+- `docs/phase4/risk_model_evaluation_report.md`
+- `docs/phase4/claim_model_evaluation_report.md`
+- `docs/phase4/model_card.md`
+- `docs/phase4/explainability_summary.md`
+- `docs/phase4/phase4_metrics.json`
+- `docs/phase4/phase4_evaluation_summary.csv`
+- `docs/phase4/risk_model_segment_metrics.csv`
+- `docs/phase4/claim_model_segment_metrics.csv`
+- `docs/phase4/risk_model_feature_importance.csv`
+- `docs/phase4/claim_model_feature_importance.csv`
+
+### Phase 4 Highlights
+
+- Test recall for High Risk visits: `0.1261`.
+- Test recall for Rejected claims: `0.6044`.
+- Claim outcome modeling is the stronger near-term operational candidate.
+- Visit risk modeling needs improved features or imbalance handling before high-stakes use.
+- Segment checks cover `gender`, `city`, and `insurance_provider`.
+- Model card documents intended use, limitations, assumptions, and monitoring controls.
+
+## Phase 5: Deployment and API Integration
+
+Phase 5 converts the trained model artifacts into a real-time FastAPI service for hospital dashboards and internal systems.
+
+### How to Run Phase 5
+
+Prepare data, models, and evaluation outputs:
+
+```bash
+python3 scripts/build_features.py
+python3 scripts/train_phase3_models.py
+python3 scripts/evaluate_phase4_models.py
+```
+
+Start the prediction API:
+
+```bash
+uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open the interactive API docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Phase 5 outputs:
+
+- `api/main.py`
+- `docs/deployment_runbook.md`
+- `docs/api_examples.md`
+- `docs/phase5_deployment_guide.md`
+- Runtime audit log: `logs/predictions.jsonl`
+
+### Phase 5 Highlights
+
+- Health endpoint validates data, schema, and model artifact availability.
+- `/predict/risk` returns visit-risk predictions from `risk_best_model.joblib`.
+- `/predict/claim` returns claim-outcome predictions from `claim_best_model.joblib`.
+- Requests and responses are validated with Pydantic schemas.
+- Predictions are logged with timestamp, model version, input feature hash, prediction, probabilities, and audit log ID.
+
 ## Roadmap
 
 - Phase 1: SQL analytics foundation
 - Phase 2: Exploratory data analysis and API package
 - Phase 3: Predictive modeling / AI layer
-- Phase 4: Dashboard or health-tech decision support interface
+- Phase 4: Model evaluation, explainability, and safety checks
+- Phase 5: Deployment and API integration
