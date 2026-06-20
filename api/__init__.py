@@ -1,0 +1,1 @@
+"""Hospital analytics FastAPI package."""

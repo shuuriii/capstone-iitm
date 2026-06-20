@@ -1,0 +1,273 @@
+{
+  "dataset": "model_table.csv",
+  "row_count": 25000,
+  "column_count": 44,
+  "primary_key": "visit_id",
+  "grain": "one row per hospital visit with patient and billing attributes",
+  "fields": [
+    {
+      "name": "visit_id",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "identifier"
+    },
+    {
+      "name": "patient_id",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "identifier"
+    },
+    {
+      "name": "bill_id",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "identifier"
+    },
+    {
+      "name": "age",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "gender",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "city",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "insurance_provider",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "chronic_flag",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "department",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "visit_type",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "risk_score",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "label_candidate"
+    },
+    {
+      "name": "doctor_id",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "identifier"
+    },
+    {
+      "name": "claim_status",
+      "dtype": "str",
+      "missing_count": 0,
+      "role": "label_candidate"
+    },
+    {
+      "name": "billed_amount",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "approved_amount",
+      "dtype": "float64",
+      "missing_count": 1318,
+      "role": "feature"
+    },
+    {
+      "name": "approved_amount_filled",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "payment_days",
+      "dtype": "float64",
+      "missing_count": 790,
+      "role": "feature"
+    },
+    {
+      "name": "payment_days_filled",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "length_of_stay_hours",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "length_of_stay_hours_filled",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "approved_amount_missing",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "payment_days_missing",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "length_of_stay_hours_missing",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "visit_frequency",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "avg_length_of_stay_per_patient",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "total_billed_per_patient",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "high_risk_visit_count",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "provider_rejection_rate",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "days_since_registration",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "visit_month",
+      "dtype": "int32",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "visit_day_of_week",
+      "dtype": "int32",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "visit_quarter",
+      "dtype": "int32",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "billing_month",
+      "dtype": "int32",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "billing_lag_days",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "approval_ratio",
+      "dtype": "float64",
+      "missing_count": 0,
+      "role": "feature"
+    },
+    {
+      "name": "billed_amount_outlier_class",
+      "dtype": "object",
+      "missing_count": 0,
+      "role": "quality_classification"
+    },
+    {
+      "name": "payment_days_outlier_class",
+      "dtype": "object",
+      "missing_count": 0,
+      "role": "quality_classification"
+    },
+    {
+      "name": "length_of_stay_hours_outlier_class",
+      "dtype": "object",
+      "missing_count": 0,
+      "role": "quality_classification"
+    },
+    {
+      "name": "billed_amount_is_outlier",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "payment_days_is_outlier",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "length_of_stay_hours_is_outlier",
+      "dtype": "int64",
+      "missing_count": 0,
+      "role": "quality_flag"
+    },
+    {
+      "name": "visit_date",
+      "dtype": "datetime64[us]",
+      "missing_count": 0,
+      "role": "date"
+    },
+    {
+      "name": "billing_date",
+      "dtype": "datetime64[us]",
+      "missing_count": 0,
+      "role": "date"
+    },
+    {
+      "name": "registration_date",
+      "dtype": "datetime64[us]",
+      "missing_count": 0,
+      "role": "date"
+    }
+  ]
+}

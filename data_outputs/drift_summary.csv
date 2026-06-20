@@ -1,0 +1,7 @@
+feature,early_period_mean,late_period_mean,pct_change
+billed_amount,20704.1549,21037.36,1.61
+approved_amount_filled,15963.3116,16381.1027,2.62
+payment_days_filled,13.0876,12.9706,-0.89
+length_of_stay_hours_filled,19.6647,19.4384,-1.15
+approval_ratio,0.7626,0.7672,0.61
+provider_rejection_rate,0.1519,0.1519,0.0
