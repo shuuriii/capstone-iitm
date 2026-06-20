@@ -6,6 +6,7 @@ This project is being built in phases. The current completed phase is:
 
 - Phase 1: SQL Analytics Layer - Business Intelligence Foundation
 - Phase 2: Python EDA, Data Quality, Feature Engineering, and API Package
+- Phase 3: Classification Modeling for Visit Risk and Claim Outcomes
 
 ## Project Phases
 
@@ -13,7 +14,7 @@ This project is being built in phases. The current completed phase is:
 | --- | --- | --- | --- |
 | Phase 1 | SQL analytics layer | [Phase1_SQL.ipynb](notebooks/Phase1_SQL.ipynb) | Complete |
 | Phase 2 | Exploratory data analysis | [Phase2_EDA.ipynb](notebooks/Phase2_EDA.ipynb) | Complete |
-| Phase 3 | Predictive modeling / AI layer | Coming soon | Planned |
+| Phase 3 | Predictive modeling / AI layer | [Phase3_Modeling.ipynb](notebooks/Phase3_Modeling.ipynb) | Complete |
 | Phase 4 | Dashboard or decision support interface | Coming soon | Planned |
 
 To view a phase notebook, click the notebook link above. GitHub renders `.ipynb` files directly in the browser, so visitors can read the workflow, SQL, outputs, and conclusions without installing anything.
@@ -46,10 +47,12 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 ├── billing.csv
 ├── notebooks/
 │   ├── Phase1_SQL.ipynb
-│   └── Phase2_EDA.ipynb
+│   ├── Phase2_EDA.ipynb
+│   └── Phase3_Modeling.ipynb
 ├── scripts/
 │   ├── build_sqlite_db.py
-│   └── build_features.py
+│   ├── build_features.py
+│   └── train_phase3_models.py
 ├── api/
 │   └── main.py
 ├── data_outputs/
@@ -58,6 +61,12 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 │   └── drift_summary.csv
 ├── reports/
 │   └── figures/
+├── model_artifacts/
+│   ├── risk_best_model.joblib
+│   ├── claim_best_model.joblib
+│   ├── feature_schema.json
+│   ├── metrics.json
+│   └── metrics_summary.csv
 ├── sql/
 │   ├── 01_schema.sql
 │   ├── 02_views.sql
@@ -67,6 +76,8 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
     ├── analysis_results.md
     ├── api_examples.md
     ├── deployment_runbook.md
+    ├── Healthcare_Insights_Report.docx
+    ├── healthcare_insights_report_summary.md
     ├── index_strategy.md
     └── phase2_data_quality_report.md
 ```
@@ -135,6 +146,59 @@ Phase 2 outputs:
 - Confirmed `length_of_stay_hours` is complete.
 - Added visit frequency, patient average length of stay, provider rejection rate, days since registration, calendar features, approval ratio, missingness flags, and outlier classifications.
 - Added a FastAPI package with health, schema, summary, and visit-risk scoring endpoints.
+
+## Phase 3: Classification Modeling
+
+Phase 3 trains two leakage-safe classification systems using the Phase 2 modeling table.
+
+- Model A predicts visit risk: `risk_score` as Low, Medium, or High.
+- Model B predicts insurance claim outcome: `claim_status` as Paid, Pending, or Rejected.
+
+Both models use a time-based split: earliest 80% of visits for training and latest 20% for testing.
+
+### How to Run Phase 3
+
+Build Phase 2 features first:
+
+```bash
+python3 scripts/build_features.py
+```
+
+Train and save Phase 3 models:
+
+```bash
+python3 scripts/train_phase3_models.py
+```
+
+Open the modeling notebook:
+
+- [notebooks/Phase3_Modeling.ipynb](notebooks/Phase3_Modeling.ipynb)
+
+Phase 3 outputs:
+
+- `notebooks/Phase3_Modeling.ipynb`
+- `scripts/train_phase3_models.py`
+- `model_artifacts/risk_logistic_regression.joblib`
+- `model_artifacts/risk_random_forest.joblib`
+- `model_artifacts/risk_best_model.joblib`
+- `model_artifacts/claim_logistic_regression.joblib`
+- `model_artifacts/claim_random_forest.joblib`
+- `model_artifacts/claim_best_model.joblib`
+- `model_artifacts/feature_schema.json`
+- `model_artifacts/metrics.json`
+- `model_artifacts/metrics_summary.csv`
+
+Final business report:
+
+- `docs/Healthcare_Insights_Report.docx`
+- `docs/healthcare_insights_report_summary.md`
+
+### Phase 3 Highlights
+
+- Trained Logistic Regression baselines and Random Forest advanced models for both targets.
+- Used macro F1 as the main comparison metric to account for class imbalance.
+- Saved deployable `.joblib` pipelines that include preprocessing and model steps.
+- Documented leakage-safe feature sets and production feature schema.
 
 ## Roadmap
 

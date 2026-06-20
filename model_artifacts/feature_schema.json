@@ -1,0 +1,72 @@
+{
+  "phase": "Phase 3 Modeling",
+  "source_dataset": "data_outputs/model_table.csv",
+  "split_strategy": "time-based split by visit_date: earliest 80% train, latest 20% test",
+  "leakage_policy": {
+    "risk_model": "Excludes claim_status, approval, payment delay, approval ratio, and claim-derived fields.",
+    "claim_model": "Excludes approved_amount, payment_days, approval_ratio, provider_rejection_rate, and target-derived outcome fields."
+  },
+  "models": {
+    "risk_model": {
+      "target": "risk_score",
+      "features": [
+        "age",
+        "gender",
+        "city",
+        "insurance_provider",
+        "chronic_flag",
+        "department",
+        "visit_type",
+        "doctor_id",
+        "length_of_stay_hours_filled",
+        "visit_frequency",
+        "days_since_registration",
+        "visit_month",
+        "visit_day_of_week",
+        "visit_quarter"
+      ],
+      "categorical_features": [
+        "gender",
+        "city",
+        "insurance_provider",
+        "department",
+        "visit_type"
+      ],
+      "best_model": "random_forest",
+      "best_artifact": "model_artifacts/risk_best_model.joblib"
+    },
+    "claim_model": {
+      "target": "claim_status",
+      "features": [
+        "age",
+        "gender",
+        "city",
+        "insurance_provider",
+        "chronic_flag",
+        "department",
+        "visit_type",
+        "risk_score",
+        "doctor_id",
+        "billed_amount",
+        "length_of_stay_hours_filled",
+        "visit_frequency",
+        "days_since_registration",
+        "visit_month",
+        "visit_day_of_week",
+        "visit_quarter",
+        "billing_month",
+        "billing_lag_days"
+      ],
+      "categorical_features": [
+        "gender",
+        "city",
+        "insurance_provider",
+        "department",
+        "visit_type",
+        "risk_score"
+      ],
+      "best_model": "random_forest",
+      "best_artifact": "model_artifacts/claim_best_model.joblib"
+    }
+  }
+}

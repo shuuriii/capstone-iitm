@@ -1,0 +1,5 @@
+problem,model,accuracy,macro_f1,weighted_f1,artifact
+risk_model,logistic_regression,0.3142,0.3058,0.3204,model_artifacts/risk_logistic_regression.joblib
+risk_model,random_forest,0.4102,0.3491,0.4018,model_artifacts/risk_random_forest.joblib
+claim_model,logistic_regression,0.3526,0.3231,0.3801,model_artifacts/claim_logistic_regression.joblib
+claim_model,random_forest,0.4442,0.3753,0.4533,model_artifacts/claim_random_forest.joblib
