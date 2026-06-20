@@ -6,6 +6,17 @@ This project is being built in phases. The current completed phase is:
 
 - Phase 1: SQL Analytics Layer - Business Intelligence Foundation
 
+## Project Phases
+
+| Phase | Focus | Notebook | Status |
+| --- | --- | --- | --- |
+| Phase 1 | SQL analytics layer | [Phase1_SQL.ipynb](notebooks/Phase1_SQL.ipynb) | Complete |
+| Phase 2 | Exploratory data analysis | Coming soon | Planned |
+| Phase 3 | Predictive modeling / AI layer | Coming soon | Planned |
+| Phase 4 | Dashboard or decision support interface | Coming soon | Planned |
+
+To view a phase notebook, click the notebook link above. GitHub renders `.ipynb` files directly in the browser, so visitors can read the workflow, SQL, outputs, and conclusions without installing anything.
+
 ## Phase 1: SQL Analytics Layer
 
 Phase 1 converts raw hospital CSV datasets into a structured SQLite analytics layer with enforced integrity, reusable business views, indexed query paths, and leadership-ready KPI analysis.
@@ -22,17 +33,18 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 - Add indexes for frequent joins, filters, and aggregations.
 - Create reusable SQL views for operational and billing analysis.
 - Run operational, financial, and data-quality checks.
-- Package the phase as a Jupyter notebook: `Phase1_SQL.ipynb`.
+- Package the phase as a Jupyter notebook: `notebooks/Phase1_SQL.ipynb`.
 
 ## Repository Structure
 
 ```text
 .
-├── Phase1_SQL.ipynb
 ├── README_PHASE1.md
 ├── patients.csv
 ├── visits.csv
 ├── billing.csv
+├── notebooks/
+│   └── Phase1_SQL.ipynb
 ├── scripts/
 │   └── build_sqlite_db.py
 ├── sql/
@@ -46,6 +58,10 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 ```
 
 ## How to Run Phase 1
+
+Open the notebook on GitHub:
+
+- [notebooks/Phase1_SQL.ipynb](notebooks/Phase1_SQL.ipynb)
 
 Rebuild the SQLite database:
 

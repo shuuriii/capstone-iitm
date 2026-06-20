@@ -6,6 +6,10 @@ This folder builds a trusted SQLite analytics layer from:
 - `visits.csv`
 - `billing.csv`
 
+The phase notebook is available at:
+
+- `notebooks/Phase1_SQL.ipynb`
+
 ## Build
 
 Run:
