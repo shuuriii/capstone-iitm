@@ -1,0 +1,14 @@
+feature,feature_type,baseline_mean,current_mean,pct_change,drift_metric,drift_metric_name,status
+billed_amount,numeric,20870.7574,20870.7574,0.0,0.0,psi,stable
+approved_amount_filled,numeric,16172.2072,16172.2072,0.0,0.0,psi,stable
+payment_days_filled,numeric,13.0291,13.0291,0.0,0.0,psi,stable
+length_of_stay_hours_filled,numeric,19.5516,19.5516,0.0,0.0,psi,stable
+visit_frequency,numeric,5.9609,5.9609,0.0,0.0,psi,stable
+provider_rejection_rate,numeric,0.1519,0.1519,0.0,0.0,psi,stable
+approval_ratio,numeric,0.7649,0.7649,0.0,0.0,psi,stable
+department,categorical,,,,0.0,max_category_share_diff,stable
+visit_type,categorical,,,,0.0,max_category_share_diff,stable
+insurance_provider,categorical,,,,0.0,max_category_share_diff,stable
+city,categorical,,,,0.0,max_category_share_diff,stable
+risk_score,categorical,,,,0.0,max_category_share_diff,stable
+claim_status,categorical,,,,0.0,max_category_share_diff,stable

@@ -1,0 +1,3 @@
+model_name,prediction,count,share
+claim_outcome_classifier,Paid,2,1.0
+visit_risk_classifier,Medium,2,1.0

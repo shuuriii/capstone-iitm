@@ -9,6 +9,7 @@ This project is being built in phases. The current completed phase is:
 - Phase 3: Classification Modeling for Visit Risk and Claim Outcomes
 - Phase 4: Model Evaluation, Explainability, and Safety Checks
 - Phase 5: Deployment and API Integration
+- Phase 6: Monitoring, Drift Detection, and Governance
 
 ## Project Phases
 
@@ -19,6 +20,7 @@ This project is being built in phases. The current completed phase is:
 | Phase 3 | Predictive modeling / AI layer | [Phase3_Modeling.ipynb](notebooks/Phase3_Modeling.ipynb) | Complete |
 | Phase 4 | Model evaluation and governance | [Phase4_Evaluation.ipynb](notebooks/Phase4_Evaluation.ipynb) | Complete |
 | Phase 5 | Deployment and API integration | FastAPI service | Complete |
+| Phase 6 | Monitoring and governance | Monitoring scripts and reports | Complete |
 
 To view a phase notebook, click the notebook link above. GitHub renders `.ipynb` files directly in the browser, so visitors can read the workflow, SQL, outputs, and conclusions without installing anything.
 
@@ -57,7 +59,8 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
 │   ├── build_sqlite_db.py
 │   ├── build_features.py
 │   ├── train_phase3_models.py
-│   └── evaluate_phase4_models.py
+│   ├── evaluate_phase4_models.py
+│   └── monitor_phase6.py
 ├── api/
 │   └── main.py
 ├── data_outputs/
@@ -86,7 +89,8 @@ Create a reliable, queryable hospital data layer that leadership can trust for o
     ├── index_strategy.md
     ├── phase5_deployment_guide.md
     ├── phase2_data_quality_report.md
-    └── phase4/
+    ├── phase4/
+    └── phase6/
 ```
 
 ## How to Run Phase 1
@@ -295,6 +299,43 @@ Phase 5 outputs:
 - Requests and responses are validated with Pydantic schemas.
 - Predictions are logged with timestamp, model version, input feature hash, prediction, probabilities, and audit log ID.
 
+## Phase 6: Monitoring, Drift Detection, and Governance
+
+Phase 6 adds automated monitoring for long-term model reliability and governance. It validates incoming data, tracks feature and prediction drift, summarizes audit logs, and documents limitations, assumptions, and retraining strategy.
+
+### How to Run Phase 6
+
+Run monitoring against the current model table:
+
+```bash
+python3 scripts/monitor_phase6.py
+```
+
+Run monitoring against a future scored batch:
+
+```bash
+python3 scripts/monitor_phase6.py --current-data path/to/new_batch.csv
+```
+
+Phase 6 outputs:
+
+- `scripts/monitor_phase6.py`
+- `docs/phase6/data_validation_report.csv`
+- `docs/phase6/feature_drift_report.csv`
+- `docs/phase6/prediction_drift_report.csv`
+- `docs/phase6/audit_log_summary.csv`
+- `docs/phase6/drift_detection_report.md`
+- `docs/phase6/governance_compliance.md`
+
+### Phase 6 Highlights
+
+- Validates missing values in critical fields.
+- Checks numeric ranges for billing, utilization, calendar, and ratio features.
+- Detects unseen categories in key operational and payer fields.
+- Tracks numeric feature drift using population stability index.
+- Tracks categorical drift using maximum category share difference.
+- Summarizes prediction audit logs by model version, input hash, prediction class, and timestamp range.
+
 ## Roadmap
 
 - Phase 1: SQL analytics foundation
@@ -302,3 +343,4 @@ Phase 5 outputs:
 - Phase 3: Predictive modeling / AI layer
 - Phase 4: Model evaluation, explainability, and safety checks
 - Phase 5: Deployment and API integration
+- Phase 6: Monitoring, drift detection, and governance
