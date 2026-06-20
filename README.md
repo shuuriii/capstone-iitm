@@ -349,6 +349,8 @@ Phase 7 outputs:
 
 - `notebooks/Phase7_Final_Report.ipynb`
 - `docs/Healthcare_Insights_Report.docx`
+- `docs/exported/Healthcare_Insights_Report.pdf`
+- `docs/Healthcare_Insights_Report.md`
 - `docs/healthcare_insights_report_summary.md`
 
 ### Phase 7 Highlights

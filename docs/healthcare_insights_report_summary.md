@@ -3,6 +3,8 @@
 The final business report is available as:
 
 - `docs/Healthcare_Insights_Report.docx`
+- `docs/exported/Healthcare_Insights_Report.pdf`
+- `docs/Healthcare_Insights_Report.md`
 
 It covers:
 
