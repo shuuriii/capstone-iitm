@@ -11,6 +11,7 @@ In simple terms: it helps a hospital understand **what is happening, what might 
 - Live demo: https://capstone-iitm.onrender.com/
 - Technical API docs: https://capstone-iitm.onrender.com/docs
 - GitHub repo: https://github.com/shuuriii/capstone-iitm
+- Project changelog: [CHANGELOG.md](CHANGELOG.md)
 
 The live demo lets you try:
 
