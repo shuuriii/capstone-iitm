@@ -26,7 +26,8 @@ The project is organized into seven completed phases:
 The project includes a FastAPI application for interactive model scoring.
 
 - Live API: coming soon
-- Interactive API docs: coming soon
+- Interactive API docs: https://capstone-iitm.onrender.com/docs
+- API landing page: https://capstone-iitm.onrender.com/
 - Local docs after running the API: `http://127.0.0.1:8000/docs`
 
 The deployed demo is intended to show:

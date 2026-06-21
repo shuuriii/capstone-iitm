@@ -247,7 +247,21 @@ def amount_percentile(df: pd.DataFrame, value: float, column: str) -> float:
     return float((df[column] <= value).mean())
 
 
+@app.get("/")
+def root() -> dict[str, Any]:
+    return {
+        "project": "Hospital Analytics Capstone",
+        "message": "FastAPI demo for hospital analytics, visit risk prediction, and claim outcome prediction.",
+        "interactive_docs": "/docs",
+        "health": "/api/health",
+        "summary": "/summary",
+        "schema": "/schema",
+        "prediction_endpoints": ["/predict/risk", "/predict/claim", "/score/visit"],
+    }
+
+
 @app.get("/health")
+@app.get("/api/health")
 def health() -> dict[str, Any]:
     return {
         "status": "ok",
