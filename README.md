@@ -21,6 +21,33 @@ The project is organized into seven completed phases:
 - Phase 6: Monitoring, Drift Detection, and Governance
 - Phase 7: Executive Business Report
 
+## Live Demo
+
+The project includes a FastAPI application for interactive model scoring.
+
+- Live API: coming soon
+- Interactive API docs: coming soon
+- Local docs after running the API: `http://127.0.0.1:8000/docs`
+
+The deployed demo is intended to show:
+
+- API health and available model artifacts
+- Dataset summary statistics
+- Visit risk prediction
+- Insurance claim outcome prediction
+- A transparent rule-based visit scoring endpoint
+
+## Deploying the API
+
+This repository includes `render.yaml` for deployment on Render.
+
+Render settings:
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `uvicorn api.main:app --host 0.0.0.0 --port $PORT`
+- Health check path: `/health`
+- Python version: `3.12.3`
+
 ## Project Phases
 
 | Phase | Focus | Notebook | Status |
