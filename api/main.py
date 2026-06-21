@@ -14,6 +14,7 @@ from uuid import uuid4
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 
@@ -72,6 +73,423 @@ app = FastAPI(
     version="1.0.0",
     description="Phase 5 FastAPI service for real-time visit-risk and claim-outcome predictions.",
 )
+
+DASHBOARD_HTML = """
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hospital Analytics Capstone</title>
+  <style>
+    :root {
+      --ink: #1d2433;
+      --muted: #5e6878;
+      --line: #d9dee7;
+      --panel: #ffffff;
+      --bg: #f5f7fb;
+      --accent: #0f766e;
+      --accent-dark: #0b5f59;
+      --warn: #9a3412;
+      --blue: #1d4ed8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    .hero {
+      padding: 48px 0 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+      gap: 32px;
+      align-items: start;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.7rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 14px; color: var(--muted); }
+    .lead {
+      font-size: 1.1rem;
+      max-width: 720px;
+      color: #3b4557;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    a.button, button {
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+    }
+    .primary, button.primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .primary:hover, button.primary:hover { background: var(--accent-dark); }
+    .secondary {
+      background: #ffffff;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    .summary-box {
+      background: #eef7f5;
+      border: 1px solid #bee3de;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .summary-box strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--accent-dark);
+      margin-bottom: 6px;
+    }
+    main { padding: 28px 0 48px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .panel p:last-child { margin-bottom: 0; }
+    .demo {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .demo-controls {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .demo-controls button {
+      width: 100%;
+      color: var(--ink);
+      background: #ffffff;
+      border-color: var(--line);
+    }
+    .demo-controls button.active {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+      background: #eef7f5;
+    }
+    .result {
+      min-height: 260px;
+      background: #111827;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 18px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.92rem;
+    }
+    .plain-result {
+      font-family: inherit;
+      white-space: normal;
+      background: #ffffff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .metric-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .metric {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 1.2rem;
+    }
+    .tag {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e8efff;
+      color: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 650;
+      margin: 0 6px 6px 0;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 20px 0;
+      color: var(--muted);
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+    @media (max-width: 820px) {
+      .hero, .demo { grid-template-columns: 1fr; }
+      .grid, .metric-list { grid-template-columns: 1fr; }
+      h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero">
+      <section>
+        <h1>Hospital Analytics Capstone</h1>
+        <p class="lead">
+          This project turns hospital visit, patient, and billing data into insights that help explain operational risk,
+          insurance claim outcomes, billing delays, and model monitoring.
+        </p>
+        <p>
+          Built with SQL, Python, machine learning, FastAPI, and public IIT-M capstone data.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#demo">Run Simple Demo</a>
+          <a class="button secondary" href="/docs">Technical API Docs</a>
+          <a class="button secondary" href="https://github.com/shuuriii/capstone-iitm">GitHub Repo</a>
+        </div>
+      </section>
+      <aside class="summary-box">
+        <strong>25,000</strong>
+        <p>hospital visits analyzed across departments, patients, billing records, prediction models, and monitoring reports.</p>
+      </aside>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid" aria-label="Project highlights">
+      <div class="panel">
+        <h2>Business Question</h2>
+        <p>Where are patient risk, claim rejection, missing billing values, and unusual charges most visible?</p>
+      </div>
+      <div class="panel">
+        <h2>What It Builds</h2>
+        <p>A reusable workflow from raw CSV files to SQL tables, feature engineering, ML models, API endpoints, and governance reports.</p>
+      </div>
+      <div class="panel">
+        <h2>Why It Matters</h2>
+        <p>Hospitals can use this type of workflow to find operational bottlenecks, explain claims behavior, and monitor model reliability.</p>
+      </div>
+    </section>
+
+    <section id="demo" class="panel">
+      <h2>Simple Live Demo</h2>
+      <p>Use these buttons to see the deployed model and analytics API return real results from the project data.</p>
+      <div class="demo">
+        <div class="demo-controls">
+          <button type="button" data-demo="summary" class="active">Show Dataset Summary</button>
+          <button type="button" data-demo="risk">Predict Visit Risk</button>
+          <button type="button" data-demo="claim">Predict Claim Outcome</button>
+          <button type="button" data-demo="score">Explain Visit Risk Signals</button>
+        </div>
+        <div id="result" class="result plain-result">Loading dataset summary...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Portfolio project by Shuuri. The technical API documentation remains available at <a href="/docs">/docs</a>.
+    </div>
+  </footer>
+
+  <script>
+    const result = document.getElementById("result");
+    const buttons = document.querySelectorAll("[data-demo]");
+
+    const payloads = {
+      risk: {
+        age: 45,
+        gender: "M",
+        city: "Chennai",
+        insurance_provider: "CareOne",
+        chronic_flag: 1,
+        department: "Cardiology",
+        visit_type: "OPD",
+        doctor_id: 10,
+        length_of_stay_hours_filled: 12.5,
+        visit_frequency: 3,
+        days_since_registration: 500,
+        visit_month: 6,
+        visit_day_of_week: 2,
+        visit_quarter: 2
+      },
+      claim: {
+        age: 45,
+        gender: "M",
+        city: "Chennai",
+        insurance_provider: "CareOne",
+        chronic_flag: 1,
+        department: "Cardiology",
+        visit_type: "OPD",
+        risk_score: "Medium",
+        doctor_id: 10,
+        billed_amount: 25000,
+        length_of_stay_hours_filled: 12.5,
+        visit_frequency: 3,
+        days_since_registration: 500,
+        visit_month: 6,
+        visit_day_of_week: 2,
+        visit_quarter: 2,
+        billing_month: 6,
+        billing_lag_days: 4
+      },
+      score: {
+        department: "Cardiology",
+        visit_type: "OPD",
+        insurance_provider: "CareOne",
+        billed_amount: 25000,
+        approved_amount: 18000,
+        payment_days: 18,
+        length_of_stay_hours: 12.5,
+        visit_frequency: 3,
+        chronic_flag: 1
+      }
+    };
+
+    function setActive(name) {
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.demo === name);
+      });
+    }
+
+    function percent(value) {
+      return `${Math.round(value * 100)}%`;
+    }
+
+    function showSummary(data) {
+      result.className = "result plain-result";
+      result.innerHTML = `
+        <h2>Dataset Summary</h2>
+        <p>This demo is using the modeled hospital dataset created in the project pipeline.</p>
+        <div class="metric-list">
+          <div class="metric"><span>Visits analyzed</span><strong>${data.rows.toLocaleString()}</strong></div>
+          <div class="metric"><span>Average billed amount</span><strong>${data.avg_billed_amount.toLocaleString()}</strong></div>
+          <div class="metric"><span>Average payment days</span><strong>${data.avg_payment_days}</strong></div>
+        </div>
+        <p style="margin-top: 16px;"><strong>Departments:</strong></p>
+        <p>${data.departments.map((item) => `<span class="tag">${item}</span>`).join("")}</p>
+      `;
+    }
+
+    function showPrediction(title, data) {
+      const probabilities = Object.entries(data.probabilities)
+        .map(([label, value]) => `<span class="tag">${label}: ${percent(value)}</span>`)
+        .join("");
+      result.className = "result plain-result";
+      result.innerHTML = `
+        <h2>${title}</h2>
+        <p>The model prediction for the sample case is:</p>
+        <div class="metric-list">
+          <div class="metric"><span>Prediction</span><strong>${data.prediction}</strong></div>
+          <div class="metric"><span>Model</span><strong>${data.model_name.replaceAll("_", " ")}</strong></div>
+          <div class="metric"><span>Audit log</span><strong>Created</strong></div>
+        </div>
+        <p style="margin-top: 16px;"><strong>Model confidence by class:</strong></p>
+        <p>${probabilities}</p>
+      `;
+    }
+
+    function showSignals(data) {
+      result.className = "result plain-result";
+      result.innerHTML = `
+        <h2>Rule-Based Visit Risk Signals</h2>
+        <p>This transparent score explains which business signals raised or lowered risk for the sample visit.</p>
+        <div class="metric-list">
+          <div class="metric"><span>Risk level</span><strong>${data.risk_level}</strong></div>
+          <div class="metric"><span>Risk score</span><strong>${data.risk_score}</strong></div>
+          <div class="metric"><span>Signals found</span><strong>${data.signals.length}</strong></div>
+        </div>
+        <p style="margin-top: 16px;"><strong>Signals:</strong></p>
+        <p>${data.signals.map((item) => `<span class="tag">${item.replaceAll("_", " ")}</span>`).join("") || "No high-risk signals found."}</p>
+      `;
+    }
+
+    async function runDemo(name) {
+      setActive(name);
+      result.className = "result";
+      result.textContent = "Running demo...";
+
+      try {
+        if (name === "summary") {
+          const response = await fetch("/summary");
+          showSummary(await response.json());
+          return;
+        }
+
+        const endpoint = name === "risk" ? "/predict/risk" : name === "claim" ? "/predict/claim" : "/score/visit";
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloads[name])
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(JSON.stringify(data, null, 2));
+        }
+
+        if (name === "risk") showPrediction("Visit Risk Prediction", data);
+        if (name === "claim") showPrediction("Insurance Claim Outcome Prediction", data);
+        if (name === "score") showSignals(data);
+      } catch (error) {
+        result.className = "result";
+        result.textContent = `Demo request failed.\\n\\n${error.message}`;
+      }
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => runDemo(button.dataset.demo));
+    });
+    runDemo("summary");
+  </script>
+</body>
+</html>
+"""
 
 
 class VisitRiskRequest(BaseModel):
@@ -247,17 +665,9 @@ def amount_percentile(df: pd.DataFrame, value: float, column: str) -> float:
     return float((df[column] <= value).mean())
 
 
-@app.get("/")
-def root() -> dict[str, Any]:
-    return {
-        "project": "Hospital Analytics Capstone",
-        "message": "FastAPI demo for hospital analytics, visit risk prediction, and claim outcome prediction.",
-        "interactive_docs": "/docs",
-        "health": "/api/health",
-        "summary": "/summary",
-        "schema": "/schema",
-        "prediction_endpoints": ["/predict/risk", "/predict/claim", "/score/visit"],
-    }
+@app.get("/", response_class=HTMLResponse)
+def root() -> HTMLResponse:
+    return HTMLResponse(DASHBOARD_HTML)
 
 
 @app.get("/health")
