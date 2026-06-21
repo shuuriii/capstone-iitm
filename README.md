@@ -1,15 +1,81 @@
-# Hospital Analytics Capstone
+# 🏥 Hospital Analytics Capstone
 
 An end-to-end healthcare analytics project built with public IIT-M capstone data.
 
-The project shows how raw hospital records can be turned into useful business insights, prediction models, and a simple API that could support decision-making for hospital operations and insurance billing.
+This project takes raw hospital records and turns them into a practical decision-support system: SQL reporting, data quality checks, machine learning predictions, an API, monitoring reports, and an executive business summary.
 
-In practical terms, it answers questions like:
+In simple terms: it helps a hospital understand **what is happening, what might happen next, and where teams should pay attention**.
 
-- Which hospital departments have higher visit risk?
-- Which insurance claims are more likely to be paid, pending, or rejected?
-- Where are billing delays, missing values, or unusual charges appearing?
-- How can hospital data be prepared, modeled, monitored, and explained in a professional workflow?
+## 🔗 Live Demo
+
+- Live demo: https://capstone-iitm.onrender.com/
+- Technical API docs: https://capstone-iitm.onrender.com/docs
+- GitHub repo: https://github.com/shuuriii/capstone-iitm
+
+The live demo lets you try:
+
+- Dataset summary statistics
+- Visit risk prediction
+- Insurance claim outcome prediction
+- A transparent rule-based visit risk explanation
+
+## 🧠 What Problem Does This Solve?
+
+Hospitals generate a lot of operational and billing data, but that data is often spread across different files and systems. Without a structured workflow, teams may struggle to answer basic but important questions:
+
+- Which departments are seeing higher-risk visits?
+- Which insurance claims are more likely to be rejected or delayed?
+- Where are billing amounts unusually high?
+- Which fields have missing or unreliable values?
+- Can we build a repeatable workflow from raw data to insight, prediction, deployment, and monitoring?
+
+This project simulates how a data team could build that workflow in a professional way.
+
+## 💡 Common Problems Faced
+
+The project is designed around realistic healthcare analytics issues:
+
+- **Scattered data**: patient, visit, and billing data start as separate CSV files.
+- **Data quality gaps**: important billing fields such as approved amount and payment days can be missing.
+- **Operational blind spots**: departments, providers, and visit types need to be compared using consistent KPIs.
+- **Claim uncertainty**: teams need early signals about whether claims may be paid, pending, or rejected.
+- **Model trust**: predictions need evaluation, explanation, and monitoring before they can be used responsibly.
+- **Deployment gap**: a model is not very useful if it only lives inside a notebook.
+
+## 🤖 Where Does AI Come In?
+
+The AI/ML layer is used for prediction, not for replacing human judgment.
+
+This project trains classification models for:
+
+- **Visit risk prediction**: predicts whether a visit is Low, Medium, or High risk.
+- **Claim outcome prediction**: predicts whether a claim is likely to be Paid, Pending, or Rejected.
+
+The models are packaged into a FastAPI service so predictions can be tested through a live web demo or API endpoint.
+
+## 🛡️ Guardrails and Responsible AI
+
+The project includes practical guardrails to make the workflow safer and more explainable:
+
+- **Data validation**: SQL constraints check IDs, dates, allowed categories, non-negative amounts, and billing relationships.
+- **Leakage control**: model features are selected to avoid using future/outcome information in the wrong prediction task.
+- **Time-based split**: models are trained on earlier visits and tested on later visits to better simulate real-world use.
+- **Class imbalance handling**: macro F1 is used so smaller classes are not ignored.
+- **Segment checks**: evaluation looks at performance across fields like gender, city, and insurance provider.
+- **Explainability**: feature importance and model-card style documentation are included.
+- **Monitoring**: drift and data validation reports help detect when future data may behave differently.
+- **Human-in-the-loop framing**: predictions are presented as decision support, not final medical or billing decisions.
+
+## 🧰 Tech Stack
+
+- **SQL / SQLite** for relational modeling, constraints, views, and analytics queries
+- **Python / pandas / NumPy** for EDA, cleaning, and feature engineering
+- **scikit-learn** for classification models and preprocessing pipelines
+- **FastAPI** for deployment-ready prediction endpoints
+- **Render** for the live API demo
+- **Jupyter notebooks** for readable phase-by-phase analysis
+
+## 📌 Project Roadmap
 
 The project is organized into seven completed phases:
 
@@ -21,23 +87,7 @@ The project is organized into seven completed phases:
 - Phase 6: Monitoring, Drift Detection, and Governance
 - Phase 7: Executive Business Report
 
-## Live Demo
-
-The project includes a FastAPI application for interactive model scoring.
-
-- Live demo: https://capstone-iitm.onrender.com/
-- Technical API docs: https://capstone-iitm.onrender.com/docs
-- Local docs after running the API: `http://127.0.0.1:8000/docs`
-
-The deployed demo is intended to show:
-
-- API health and available model artifacts
-- Dataset summary statistics
-- Visit risk prediction
-- Insurance claim outcome prediction
-- A transparent rule-based visit scoring endpoint
-
-## Deploying the API
+## 🚀 Deploying the API
 
 This repository includes `render.yaml` for deployment on Render.
 
