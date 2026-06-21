@@ -1,8 +1,17 @@
 # Hospital Analytics Capstone
 
-Portfolio capstone project for hospital operations, billing intelligence, and future health-tech analytics workflows.
+An end-to-end healthcare analytics project built with public IIT-M capstone data.
 
-This project is being built in phases. The current completed phase is:
+The project shows how raw hospital records can be turned into useful business insights, prediction models, and a simple API that could support decision-making for hospital operations and insurance billing.
+
+In practical terms, it answers questions like:
+
+- Which hospital departments have higher visit risk?
+- Which insurance claims are more likely to be paid, pending, or rejected?
+- Where are billing delays, missing values, or unusual charges appearing?
+- How can hospital data be prepared, modeled, monitored, and explained in a professional workflow?
+
+The project is organized into seven completed phases:
 
 - Phase 1: SQL Analytics Layer - Business Intelligence Foundation
 - Phase 2: Python EDA, Data Quality, Feature Engineering, and API Package
